@@ -42,3 +42,6 @@ testem.log
 # System files
 .DS_Store
 Thumbs.db
+
+# Crypto exchange
+neat-crypto-exchange-api/node_modules

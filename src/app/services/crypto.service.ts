@@ -57,4 +57,19 @@ export class CryptoService {
     console.error('CryptoService Error:', error);
     return throwError('An error occurred while fetching crypto data.');
   }
+
+  buyCrypto(uid: string, symbol: string, price: number): Observable<any> {
+    console.log('Buying crypto...');
+    return this.http
+      .get('http://localhost:3000/crypto-exchange', { responseType: 'text' })
+      .pipe(
+        map((response) => {
+          console.log('Purchase successful:', response);
+          console.log(symbol, price);
+          // add the response to the user's portfolio
+          return response;
+        }),
+        catchError(this.handleError),
+      );
+  }
 }

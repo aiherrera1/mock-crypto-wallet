@@ -4,5 +4,8 @@
   </div>
   <div class="card-body">
     <p>Price: {{ price }} USD Gains: {{ gains }}%</p>
+    @if (ableToBuy) {
+      <button (click)="handleBuy()">Buy</button>
+    }
   </div>
 </div>

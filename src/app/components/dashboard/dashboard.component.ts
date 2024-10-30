@@ -1,5 +1,5 @@
 // src/app/components/dashboard/dashboard.component.ts
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, Input } from '@angular/core';
 import { CryptoService } from '../../services/crypto.service';
 import { CryptoCardComponent } from '../crypto-card/crypto-card.component';
 import { Subscription } from 'rxjs';
@@ -7,7 +7,8 @@ import { Subscription } from 'rxjs';
 interface Crypto {
   symbol: string;
   price: number;
-  gains: number; // Percentage gain/loss
+  gains: number;
+  ableToBuy: boolean;
 }
 
 @Component({
@@ -18,6 +19,7 @@ interface Crypto {
   styleUrls: ['./dashboard.component.css'],
 })
 export class DashboardComponent implements OnInit, OnDestroy {
+  @Input() transactions: boolean = false;
   stocks: Crypto[] = [];
   private cryptoSubscription: Subscription | undefined;
   private previousPrices: { [symbol: string]: number } = {};
@@ -31,6 +33,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
       symbol,
       price: 0,
       gains: 0,
+      ableToBuy: this.transactions,
     }));
 
     // Subscribe to the crypto prices observable

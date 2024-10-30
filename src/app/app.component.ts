@@ -7,11 +7,21 @@ import {
 } from '@angular/router';
 import { AuthService } from './services/auth.service';
 import { User } from '@angular/fire/auth';
+import { DashboardComponent } from './components/dashboard/dashboard.component';
+import { HttpClientModule } from '@angular/common/http';
+import { CryptoService } from './services/crypto.service';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, RouterLink, RouterLinkActive],
+  imports: [
+    RouterOutlet,
+    RouterLink,
+    RouterLinkActive,
+    DashboardComponent,
+    HttpClientModule,
+  ],
+  providers: [CryptoService],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css',
 })
@@ -41,11 +51,11 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   public handleLogout(): void {
-    this.authService.logout().catch((error) => {
-      console.error('Error logging out:', error);
-    });
     this.isLoggedIn = false;
     this.user = null;
     this.router.navigate(['/']);
+    this.authService.logout().catch((error) => {
+      console.error('Error logging out:', error);
+    });
   }
 }

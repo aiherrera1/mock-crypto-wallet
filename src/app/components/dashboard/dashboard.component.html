@@ -1,0 +1,16 @@
+<h2>Stock Dashboard</h2>
+<div class="stock-container">
+  @for (item of stocks; track item.symbol) {
+    <app-crypto-card
+      [symbol]="item.symbol"
+      [price]="item.price"
+      [gains]="item.gains"
+    ></app-crypto-card>
+  }
+  <!-- <app-stock-card -->
+  <!--   *ngFor="let stock of stocks" -->
+  <!--   [symbol]="stock.symbol" -->
+  <!--   [price]="stock.price" -->
+  <!--   [gains]="stock.gains" -->
+  <!-- ></app-stock-card> -->
+</div>

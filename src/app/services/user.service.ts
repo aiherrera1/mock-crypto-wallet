@@ -78,10 +78,28 @@ export class UserService {
     }
   }
 
+  updateSharesOnTrade(symbol: string, quantity: number): void {
+    const uid = this.getUid();
+    if (!uid) {
+      console.log('User not logged in');
+      return;
+    }
+
+    const portfolioRef = ref(this.db, `users/${uid}/portfolio/${symbol}`);
+    get(portfolioRef).then((snapshot) => {
+      if (snapshot.exists()) {
+        set(portfolioRef, snapshot.val() + quantity);
+      } else {
+        set(portfolioRef, quantity);
+      }
+    });
+  }
+
   async logUserTrade(
     symbol: string,
     price: number,
     quantity: number,
+    action: string,
   ): Promise<void> {
     const uid = this.getUid();
     if (!uid) {
@@ -89,15 +107,24 @@ export class UserService {
       return;
     }
 
+    if (action === 'sell') {
+      this.updateSharesOnTrade(symbol, -quantity);
+      this.updateCapitalOnTrade(symbol, price, -quantity);
+    } else {
+      this.updateSharesOnTrade(symbol, quantity);
+      this.updateCapitalOnTrade(symbol, price, quantity);
+    }
+
     const tradeRef = ref(this.db, `users/${uid}/trades`);
     try {
       await push(tradeRef, {
+        action,
         symbol,
         price,
         quantity,
         timestamp: Date.now(),
       });
-      this.updateCapitalOnTrade(symbol, price, quantity);
+
       alert('Trade logged successfully');
     } catch (error) {
       console.error('Error logging trade:', error);
@@ -138,14 +165,25 @@ export class UserService {
   }
 
   async getSharesOfCrypto(symbol: string): Promise<number> {
-    const trades: Trade[] = await this.getUserTrades();
-    const totalShares = trades.reduce((total, trade: Trade) => {
-      if (trade.symbol === symbol) {
-        return total + trade.quantity;
+    const uid = this.getUid();
+    if (!uid) {
+      console.log('User not logged in');
+      return 0;
+    }
+
+    const portfolioRef = ref(this.db, `users/${uid}/portfolio/${symbol}`);
+    try {
+      const snapshot = await get(portfolioRef);
+      if (snapshot.exists()) {
+        return snapshot.val();
+      } else {
+        console.log('No shares found for this user');
+        return 0;
       }
-      return total;
-    }, 0);
-    return totalShares;
+    } catch (error) {
+      console.error('Error fetching shares:', error);
+      return 0;
+    }
   }
 
   async getProfitOfShares(
@@ -153,7 +191,7 @@ export class UserService {
     currentPrice: number,
   ): Promise<number> {
     let currentValue = 0;
-    const shares = await this.getSharesOfCrypto(symbol);
+    const shares = this.getShares(symbol);
     currentValue = shares * currentPrice;
 
     let totalInvested = 0;
@@ -165,5 +203,26 @@ export class UserService {
     });
 
     return currentValue - totalInvested;
+  }
+
+  getShares(symbol: string): number {
+    const uid = this.getUid();
+    if (!uid) {
+      console.log('User not logged in');
+      return 0;
+    }
+
+    const portfolioRef = ref(this.db, `users/${uid}/portfolio/${symbol}`);
+    get(portfolioRef).then((snapshot) => {
+      if (snapshot.exists()) {
+        console.log('Shares found for this user');
+        console.log(snapshot.val());
+        return snapshot.val();
+      } else {
+        console.log('No shares found for this user');
+        return 0;
+      }
+    });
+    return 0;
   }
 }

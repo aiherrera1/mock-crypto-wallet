@@ -13,7 +13,7 @@
       />
       <button (click)="handleBuy()">Buy</button>
     }
-    @if (ableToBuy) {
+    @if (shares > 0 && ableToBuy) {
       <input
         type="number"
         id="sellQuantity"

@@ -9,6 +9,7 @@ interface Crypto {
   price: number;
   gains: number;
   ableToBuy: boolean;
+  ableToSell: boolean;
   shares: number;
 }
 
@@ -53,7 +54,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
       price: 0,
       gains: 0,
       ableToBuy: this.transactions,
-      shares: 0,
+      ableToSell: this.transactions,
+      shares: this.userService.getShares(symbol),
     }));
 
     this.cryptoSubscription = this.cryptoService
@@ -85,6 +87,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.setUserCapital();
     this.subscribeToCryptoPrices();
+    console.log(this.stocks);
   }
 
   ngOnDestroy(): void {

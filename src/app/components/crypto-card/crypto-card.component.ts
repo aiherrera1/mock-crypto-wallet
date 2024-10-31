@@ -22,8 +22,10 @@ export class CryptoCardComponent implements OnInit {
   @Input() price: number = 0;
   @Input() gains: number = 0;
   @Input() ableToBuy: boolean = false;
+  @Input() ableToSell: boolean = false;
   @Input() shares: number = 0;
-  quantity: number = 0;
+  buyQuantity: number = 0;
+  sellQuantity: number = 0;
 
   constructor(
     private cryptoService: CryptoService,
@@ -37,7 +39,7 @@ export class CryptoCardComponent implements OnInit {
         console.error('Could not retrieve user capital.');
         return false;
       }
-      return capital >= this.price * this.quantity;
+      return capital >= this.price * this.buyQuantity;
     } catch (err) {
       console.error('Error checking funds:', err);
       return false;
@@ -50,7 +52,8 @@ export class CryptoCardComponent implements OnInit {
         await this.userService.logUserTrade(
           this.symbol,
           this.price,
-          this.quantity,
+          this.buyQuantity,
+          'buy',
         );
       } catch (err) {
         console.error('Purchase failed:', err);
@@ -61,20 +64,21 @@ export class CryptoCardComponent implements OnInit {
     }
   }
 
-  async ngOnInit(): Promise<void> {
-    if (!this.symbol) {
-      console.warn('Symbol is not defined');
-      return;
-    }
-
-    try {
-      this.shares = await this.userService.getSharesOfCrypto(this.symbol);
-      this.gains = await this.userService.getProfitOfShares(
-        this.symbol,
-        this.price,
-      );
-    } catch (error) {
-      console.error('Error fetching shares or profit:', error);
+  async handleSell(): Promise<void> {
+    if (this.shares >= this.sellQuantity) {
+      try {
+        await this.userService.logUserTrade(
+          this.symbol,
+          this.price,
+          this.sellQuantity,
+          'sell',
+        );
+      } catch (err) {
+        console.error('Sale failed:', err);
+        // Handle error (e.g., show error message to user)
+      }
     }
   }
+
+  async ngOnInit(): Promise<void> {}
 }

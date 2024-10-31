@@ -1,16 +1,21 @@
-<main>
-  @if (this.user) {
-    <p>Welcome, {{ this.user.email }}!</p>
+<main class="main-container">
+  @if (user) {
+    <div class="welcome-message">
+      <p>Welcome, {{ user.email }}!</p>
+    </div>
   }
-  <nav>
-    @if (this.user) {
-      <a routerLink="/dashboard" routerLinkActive="active">Home</a>
-      <a routerLink="/transactions" routerLinkActive="active">Transactions</a>
-
-      <button (click)="handleLogout()">Logout</button>
+  <nav class="navigation">
+    @if (user) {
+      <div>
+        <a routerLink="/dashboard" routerLinkActive="active">Home</a>
+        <a routerLink="/transactions" routerLinkActive="active">Transactions</a>
+        <button (click)="handleLogout()">Logout</button>
+      </div>
     } @else {
-      <a routerLink="/login" routerLinkActive="active">Login</a>
-      <a routerLink="/register">Register</a>
+      <div>
+        <a routerLink="/login" routerLinkActive="active">Login</a>
+        <a routerLink="/register">Register</a>
+      </div>
     }
   </nav>
 </main>

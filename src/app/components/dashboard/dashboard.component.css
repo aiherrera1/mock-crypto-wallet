@@ -1,0 +1,25 @@
+.dashboard-title {
+  font-size: 2rem;
+  text-align: center;
+  color: #f04e98;
+  margin-bottom: 1rem;
+}
+
+.current-balance {
+  text-align: center;
+  font-size: 1.2rem;
+  color: #5da684;
+  margin-bottom: 2rem;
+}
+
+.stock-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 1.5rem;
+  padding: 0 2rem;
+  align-items: start;
+}
+
+.dashboard {
+  background-color: #fcfdff;
+}

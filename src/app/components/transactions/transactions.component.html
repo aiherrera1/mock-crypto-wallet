@@ -1,15 +1,16 @@
 <app-dashboard [transactions]="true"></app-dashboard>
 
 <div>
-  <h2>Transactions</h2>
+  <h2 class="transaction-title">Transactions</h2>
 
   <div class="transaction-container">
-    <div class="transaction-container">
-      @for (item of transactions; track item.symbol) {
-        <p>
-          {{ item.symbol }} {{ item.price }} {{ item.quantity }} {{ item.date }}
-        </p>
-      }
-    </div>
+    @for (item of transactions; track item.symbol) {
+      <div class="transaction-item">
+        <p><strong>Symbol:</strong> {{ item.symbol }}</p>
+        <p><strong>Price:</strong> {{ item.price }} USD</p>
+        <p><strong>Quantity:</strong> {{ item.quantity }}</p>
+        <p><strong>Date:</strong> {{ item.date }}</p>
+      </div>
+    }
   </div>
 </div>

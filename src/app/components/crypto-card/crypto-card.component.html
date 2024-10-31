@@ -5,6 +5,12 @@
   <div class="card-body">
     <p>Price: {{ price }} USD Gains: {{ gains }}%</p>
     @if (ableToBuy) {
+      <input
+        type="number"
+        id="quantity"
+        name="quantity"
+        [(ngModel)]="quantity"
+      />
       <button (click)="handleBuy()">Buy</button>
     }
   </div>

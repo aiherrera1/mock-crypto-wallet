@@ -4,7 +4,7 @@
   }
   <nav>
     @if (this.user) {
-      <a routerLink="/" routerLinkActive="active">Home</a>
+      <a routerLink="/dashboard" routerLinkActive="active">Home</a>
       <a routerLink="/transactions" routerLinkActive="active">Transactions</a>
 
       <button (click)="handleLogout()">Logout</button>
@@ -14,5 +14,5 @@
     }
   </nav>
 </main>
-<app-dashboard [transactions]="false"></app-dashboard>
+
 <router-outlet />

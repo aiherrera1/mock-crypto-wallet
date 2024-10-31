@@ -1,50 +1,56 @@
 import { Component, Input } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
 import { CryptoService } from '../../services/crypto.service';
 import { UserService } from '../../services/user.service';
+import { FormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-crypto-card',
   standalone: true,
-  imports: [],
+  imports: [FormsModule, CommonModule],
   templateUrl: './crypto-card.component.html',
-  styleUrl: './crypto-card.component.css',
+  styleUrls: ['./crypto-card.component.css'],
 })
 export class CryptoCardComponent {
   @Input() symbol: string = '';
   @Input() price: number = 0;
   @Input() gains: number = 0;
   @Input() ableToBuy: boolean = false;
+  quantity: number = 0;
 
   constructor(
     private cryptoService: CryptoService,
     private userService: UserService,
   ) {}
 
-  async handleBuy(): Promise<void> {
+  async hasSufficientFunds(): Promise<boolean> {
     try {
-      const response = await this.cryptoService
-        .buyCrypto('hola', this.symbol, this.price)
-        .toPromise();
-      console.log('Purchase successful:', response);
-
-      this.userService.logUserTrade(this.symbol, this.price);
-      const trades: { symbol: string; price: number }[] =
-        await this.userService.getUserTrades();
-      console.log('Trades:', trades);
-
-      const capital: number | undefined =
-        await this.userService.getUserCapital();
-      if (capital !== undefined) {
-        await this.userService.updateUserCapital(capital - this.price);
-        console.log('Capital updated successfully.');
-        // Handle success (e.g., show confirmation to user)
-      } else {
+      const capital = await this.userService.getUserCapital();
+      if (capital === undefined) {
         console.error('Could not retrieve user capital.');
+        return false;
       }
+      return capital >= this.price * this.quantity;
     } catch (err) {
-      console.error('Purchase failed:', err);
-      // Handle error (e.g., show error message to user)
+      console.error('Error checking funds:', err);
+      return false;
+    }
+  }
+
+  async handleBuy(): Promise<void> {
+    if (await this.hasSufficientFunds()) {
+      try {
+        await this.userService.logUserTrade(
+          this.symbol,
+          this.price,
+          this.quantity,
+        );
+      } catch (err) {
+        console.error('Purchase failed:', err);
+        // Handle error (e.g., show error message to user)
+      }
+    } else {
+      alert('Insufficient funds');
     }
   }
 }

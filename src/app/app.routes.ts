@@ -9,4 +9,5 @@ export const routes: Routes = [
   { path: 'register', component: RegisterComponent },
   { path: 'transactions', component: TransactionsComponent },
   { path: 'dashboard', component: DashboardComponent },
+  { path: '', redirectTo: '/dashboard', pathMatch: 'full' },
 ];

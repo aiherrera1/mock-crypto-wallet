@@ -1,8 +1,8 @@
-// src/app/components/dashboard/dashboard.component.ts
 import { Component, OnInit, OnDestroy, Input } from '@angular/core';
 import { CryptoService } from '../../services/crypto.service';
 import { CryptoCardComponent } from '../crypto-card/crypto-card.component';
 import { Subscription } from 'rxjs';
+import { UserService } from '../../services/user.service';
 
 interface Crypto {
   symbol: string;
@@ -21,13 +21,26 @@ interface Crypto {
 export class DashboardComponent implements OnInit, OnDestroy {
   @Input() transactions: boolean = false;
   stocks: Crypto[] = [];
+  capital: number = 0;
   private cryptoSubscription: Subscription | undefined;
   private previousPrices: { [symbol: string]: number } = {};
 
-  constructor(private cryptoService: CryptoService) {}
+  constructor(
+    private cryptoService: CryptoService,
+    private userService: UserService,
+  ) {}
 
-  ngOnInit(): void {
-    // Initialize with empty stocks or predefined symbols
+  setUserCapital(): void {
+    this.userService.getUserCapital().then((capital) => {
+      if (capital === undefined) {
+        console.error('Could not retrieve user capital.');
+        return;
+      }
+      this.capital = capital;
+    });
+  }
+
+  subscribeToCryptoPrices(): void {
     const symbols = ['BTC', 'ETH', 'XRP', 'BCH', 'ADA', 'LTC', 'XEM', 'XLM'];
     this.stocks = symbols.map((symbol) => ({
       symbol,
@@ -36,7 +49,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
       ableToBuy: this.transactions,
     }));
 
-    // Subscribe to the crypto prices observable
     this.cryptoSubscription = this.cryptoService
       .getCryptoPricesEvery30Seconds()
       .subscribe(
@@ -58,9 +70,13 @@ export class DashboardComponent implements OnInit, OnDestroy {
         },
         (error) => {
           console.error('Error fetching crypto prices:', error);
-          // Optionally, display an error message to the user
         },
       );
+  }
+
+  ngOnInit(): void {
+    this.setUserCapital();
+    this.subscribeToCryptoPrices();
   }
 
   ngOnDestroy(): void {

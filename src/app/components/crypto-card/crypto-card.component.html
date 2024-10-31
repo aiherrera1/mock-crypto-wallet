@@ -3,7 +3,7 @@
     <h3>{{ symbol }}</h3>
   </div>
   <div class="card-body">
-    <p>Price: {{ price }} USD Gains: {{ gains }}%</p>
+    <p>Price: {{ price }} USD Profit: {{ gains }} USD</p>
     @if (ableToBuy) {
       <input
         type="number"
@@ -13,5 +13,6 @@
       />
       <button (click)="handleBuy()">Buy</button>
     }
+    <p>Shares: {{ shares }}</p>
   </div>
 </div>

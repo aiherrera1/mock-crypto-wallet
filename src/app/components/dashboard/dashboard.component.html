@@ -1,11 +1,12 @@
 <h2>Stock Dashboard</h2>
+<p>Current Balance: {{ capital }}</p>
 <div class="stock-container">
   @for (item of stocks; track item.symbol) {
     <app-crypto-card
       [symbol]="item.symbol"
       [price]="item.price"
-      [gains]="item.gains"
       [ableToBuy]="item.ableToBuy"
+      [gains]="item.gains"
     ></app-crypto-card>
   }
 </div>

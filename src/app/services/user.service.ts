@@ -2,6 +2,13 @@ import { Injectable } from '@angular/core';
 import { AuthService } from './auth.service';
 import { getDatabase, ref, get, set, push } from '@angular/fire/database';
 
+interface Trade {
+  symbol: string;
+  price: number;
+  quantity: number;
+  timestamp: number;
+}
+
 @Injectable({
   providedIn: 'root',
 })
@@ -11,9 +18,7 @@ export class UserService {
 
   getUid(): string | undefined {
     const user = this.authService.getCurrentUser();
-    console.log(user);
     if (user) {
-      console.log(user.uid);
       return user.uid;
     }
     return undefined;
@@ -37,7 +42,6 @@ export class UserService {
     try {
       const snapshot = await get(capitalRef);
       if (snapshot.exists()) {
-        console.log(`Capital: ${snapshot.val()}`);
         return snapshot.val();
       } else {
         console.log('No capital found for this user');
@@ -104,7 +108,6 @@ export class UserService {
   formatTrades(
     trades: any,
   ): { symbol: string; price: number; quantity: number; date: string }[] {
-    console.log(trades);
     return Object.keys(trades).map((key) => ({
       symbol: trades[key].symbol,
       price: trades[key].price,
@@ -132,5 +135,35 @@ export class UserService {
       console.error('Error fetching trades:', error);
       return [];
     }
+  }
+
+  async getSharesOfCrypto(symbol: string): Promise<number> {
+    const trades: Trade[] = await this.getUserTrades();
+    const totalShares = trades.reduce((total, trade: Trade) => {
+      if (trade.symbol === symbol) {
+        return total + trade.quantity;
+      }
+      return total;
+    }, 0);
+    return totalShares;
+  }
+
+  async getProfitOfShares(
+    symbol: string,
+    currentPrice: number,
+  ): Promise<number> {
+    let currentValue = 0;
+    const shares = await this.getSharesOfCrypto(symbol);
+    currentValue = shares * currentPrice;
+
+    let totalInvested = 0;
+    const trades = await this.getUserTrades();
+    trades.forEach((trade: Trade) => {
+      if (trade.symbol === symbol) {
+        totalInvested += trade.price * trade.quantity;
+      }
+    });
+
+    return currentValue - totalInvested;
   }
 }

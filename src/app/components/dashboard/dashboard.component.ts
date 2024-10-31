@@ -9,6 +9,7 @@ interface Crypto {
   price: number;
   gains: number;
   ableToBuy: boolean;
+  shares: number;
 }
 
 @Component({
@@ -22,7 +23,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   @Input() transactions: boolean = false;
   stocks: Crypto[] = [];
   capital: number = 0;
-  private cryptoSubscription: Subscription | undefined;
+  private cryptoSubscription: Subscription | null = null;
   private previousPrices: { [symbol: string]: number } = {};
 
   constructor(
@@ -31,13 +32,18 @@ export class DashboardComponent implements OnInit, OnDestroy {
   ) {}
 
   setUserCapital(): void {
-    this.userService.getUserCapital().then((capital) => {
-      if (capital === undefined) {
-        console.error('Could not retrieve user capital.');
-        return;
-      }
-      this.capital = capital;
-    });
+    this.userService.getUserCapital().then(
+      (capital) => {
+        if (capital === undefined) {
+          console.error('Could not retrieve user capital.');
+          return;
+        }
+        this.capital = capital;
+      },
+      (error) => {
+        console.error('Error retrieving user capital:', error);
+      },
+    );
   }
 
   subscribeToCryptoPrices(): void {
@@ -47,31 +53,33 @@ export class DashboardComponent implements OnInit, OnDestroy {
       price: 0,
       gains: 0,
       ableToBuy: this.transactions,
+      shares: 0,
     }));
 
     this.cryptoSubscription = this.cryptoService
       .getCryptoPricesEvery30Seconds()
       .subscribe(
-        (cryptoPrices) => {
-          cryptoPrices.forEach((crypto) => {
-            const stock = this.stocks.find((s) => s.symbol === crypto.symbol);
-            if (stock) {
-              const previousPrice =
-                this.previousPrices[crypto.symbol] || crypto.price;
-              const gain =
-                previousPrice !== 0
-                  ? ((crypto.price - previousPrice) / previousPrice) * 100
-                  : 0;
-              stock.price = crypto.price;
-              stock.gains = gain;
-              this.previousPrices[crypto.symbol] = crypto.price;
-            }
-          });
-        },
-        (error) => {
-          console.error('Error fetching crypto prices:', error);
-        },
+        (cryptoPrices) => this.updateCryptoPrices(cryptoPrices),
+        (error) => this.handleCryptoError(error),
       );
+  }
+
+  private updateCryptoPrices(
+    cryptoPrices: { symbol: string; price: number }[],
+  ): void {
+    cryptoPrices.forEach((crypto) => {
+      const stock = this.stocks.find((s) => s.symbol === crypto.symbol);
+      if (stock) {
+        const previousPrice =
+          this.previousPrices[crypto.symbol] ?? crypto.price;
+        stock.price = crypto.price;
+        this.previousPrices[crypto.symbol] = crypto.price;
+      }
+    });
+  }
+
+  private handleCryptoError(error: any): void {
+    console.error('Error fetching crypto prices:', error);
   }
 
   ngOnInit(): void {
@@ -80,8 +88,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    if (this.cryptoSubscription) {
-      this.cryptoSubscription.unsubscribe();
-    }
+    this.cryptoSubscription?.unsubscribe();
   }
 }

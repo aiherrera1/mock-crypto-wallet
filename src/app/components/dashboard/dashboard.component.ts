@@ -4,11 +4,11 @@ import { CryptoService } from '../../services/crypto.service';
 import { CryptoCardComponent } from '../crypto-card/crypto-card.component';
 import { Subscription } from 'rxjs';
 import { UserService } from '../../services/user.service';
+import { CommonModule } from '@angular/common';
 
 interface Crypto {
   symbol: string;
   price: number;
-  gains: number;
   ableToBuy: boolean;
   ableToSell: boolean;
 }
@@ -16,7 +16,7 @@ interface Crypto {
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CryptoCardComponent],
+  imports: [CryptoCardComponent, CommonModule],
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css'],
 })
@@ -24,6 +24,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
   @Input() transactions: boolean = false;
   stocks: Crypto[] = [];
   capital: number = 0;
+  formattedCapital: string = '';
   private cryptoSubscription: Subscription | null = null;
   private previousPrices: { [symbol: string]: number } = {};
 
@@ -50,7 +51,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.stocks = symbols.map((symbol) => ({
       symbol,
       price: 0,
-      gains: 0,
       ableToBuy: this.transactions,
       ableToSell: this.transactions,
     }));

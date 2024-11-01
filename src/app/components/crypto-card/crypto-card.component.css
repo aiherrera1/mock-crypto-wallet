@@ -68,7 +68,7 @@
 
 /* Input Styling */
 .transaction-section input {
-  width: 60px;
+  width: 40px;
   padding: 0.3rem;
   font-size: 0.9rem;
   border: 1px solid #ddd;
@@ -111,4 +111,18 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
+}
+
+.transaction-section button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.transaction-section input:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.transaction-section button:disabled:hover {
+  background-color: #3369fd;
 }

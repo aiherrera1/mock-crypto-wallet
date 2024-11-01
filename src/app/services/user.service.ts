@@ -8,6 +8,7 @@ interface Trade {
   price: number;
   quantity: number;
   timestamp: number;
+  action: string;
 }
 
 @Injectable({
@@ -136,14 +137,19 @@ export class UserService implements OnInit {
     }
   }
 
-  formatTrades(
-    trades: any,
-  ): { symbol: string; price: number; quantity: number; date: string }[] {
+  formatTrades(trades: any): {
+    symbol: string;
+    price: number;
+    quantity: number;
+    date: string;
+    action: string;
+  }[] {
     return Object.keys(trades).map((key) => ({
       symbol: trades[key].symbol,
       price: trades[key].price,
       quantity: trades[key].quantity,
       date: new Date(trades[key].timestamp).toLocaleString(),
+      action: trades[key].action,
     }));
   }
 
@@ -156,6 +162,7 @@ export class UserService implements OnInit {
     const tradesRef = ref(this.db, `users/${uid}/trades`);
     try {
       const snapshot = await get(tradesRef);
+      console.log(snapshot.val());
       if (snapshot.exists()) {
         return this.formatTrades(snapshot.val());
       } else {

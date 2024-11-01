@@ -6,6 +6,7 @@
   <div class="transaction-container">
     @for (item of transactions; track item.symbol) {
       <div class="transaction-item">
+        <p><strong>Type:</strong> {{ item.action }}</p>
         <p><strong>Symbol:</strong> {{ item.symbol }}</p>
         <p><strong>Price:</strong> {{ item.price }} USD</p>
         <p><strong>Quantity:</strong> {{ item.quantity }}</p>

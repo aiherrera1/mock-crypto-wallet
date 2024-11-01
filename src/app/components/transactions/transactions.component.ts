@@ -7,6 +7,7 @@ interface Transaction {
   price: number;
   quantity: number;
   date: string;
+  action: 'buy' | 'sell';
 }
 
 @Component({
@@ -24,6 +25,7 @@ export class TransactionsComponent implements OnInit, OnDestroy {
   async ngOnInit(): Promise<void> {
     try {
       this.transactions = await this.userService.getUserTrades();
+      console.log('User transactions:', this.transactions);
     } catch (error) {
       console.error('Error fetching user trades:', error);
       this.transactions = [];

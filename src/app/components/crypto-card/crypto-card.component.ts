@@ -21,6 +21,7 @@ export class CryptoCardComponent implements OnInit {
   @Input() symbol: string = '';
   @Input() price: number = 0;
   @Input() ableToBuy: boolean = false;
+
   gains: number = 0;
   shares: number = 0;
   buyQuantity: number = 0;
@@ -132,12 +133,6 @@ export class CryptoCardComponent implements OnInit {
       );
       this.capital = (await this.userService.getUserCapital()) ?? 0;
 
-      this.formattedGains = this.gains.toLocaleString('en-US', {
-        style: 'currency',
-        currency: 'USD',
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2,
-      });
       this.cdr.markForCheck();
     } catch (error) {
       console.error('Error fetching user data:', error);

@@ -28,6 +28,10 @@
   font-size: 1.2rem;
 }
 
+.icon span {
+  background-color: #3369fd;
+}
+
 .symbol-name h3 {
   font-size: 1rem;
   font-weight: bold;
@@ -52,6 +56,20 @@
   font-size: 0.9rem;
   color: #5a5a5a;
   margin: 0.3rem 0;
+}
+
+.gains {
+  font-size: 0.9rem;
+  color: #5a5a5a;
+  margin: 0.3rem 0;
+}
+
+.profit {
+  color: #50a684;
+}
+
+.loss {
+  color: #f9423a;
 }
 
 .transaction-section {

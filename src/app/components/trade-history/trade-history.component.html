@@ -1,0 +1,35 @@
+<div>
+  <h2 class="transaction-title">Transactions</h2>
+
+  <table class="transaction-table">
+    <thead>
+      <tr>
+        <th>Type</th>
+        <th>Symbol</th>
+        <th>Price</th>
+        <th>Quantity</th>
+        <th>Total</th>
+        <th>Date</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (item of transactions; track item.symbol) {
+        <tr>
+          <td [ngClass]="item.action.toLowerCase()">
+            {{ item.action | uppercase }}
+          </td>
+          <td>{{ item.symbol }}</td>
+          <td>{{ item.price | currency: "USD" : "symbol" : "1.2-2" }}</td>
+          <td>{{ item.quantity }}</td>
+          <td>
+            {{
+              totalAmount(item.price, item.quantity)
+                | currency: "USD" : "symbol" : "1.2-2"
+            }}
+          </td>
+          <td>{{ item.date | date: "medium" }}</td>
+        </tr>
+      }
+    </tbody>
+  </table>
+</div>

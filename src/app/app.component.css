@@ -1,0 +1,49 @@
+.main-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2rem;
+  background-color: #fcfdff;
+  color: #151f6d;
+}
+
+.welcome-message {
+  font-size: 1.2rem;
+  color: #151f1d;
+  margin-bottom: 1.5rem;
+}
+
+.navigation {
+  display: flex;
+  gap: 1.5rem;
+}
+
+.navigation a {
+  text-decoration: none;
+  color: #3369f0;
+  font-weight: bold;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  transition: background-color 0.3s ease;
+}
+
+.navigation a:hover,
+.navigation .active {
+  background-color: #3369f0;
+  color: #fcfdff;
+}
+
+button {
+  background-color: #f9423a;
+  color: #fcfdff;
+  border: none;
+  padding: 0.5rem 1rem;
+  font-weight: bold;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: #ff9e1b;
+}

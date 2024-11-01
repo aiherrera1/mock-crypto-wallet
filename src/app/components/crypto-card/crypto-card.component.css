@@ -1,0 +1,128 @@
+.card {
+  width: 220px;
+  padding: 1rem;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  background-color: #ffffff;
+}
+
+.card-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.icon {
+  width: 30px;
+  height: 30px;
+  background-color: #3369fd;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  font-size: 1.2rem;
+}
+
+.symbol-name h3 {
+  font-size: 1rem;
+  font-weight: bold;
+  color: #151f1d;
+  margin: 0;
+}
+
+.crypto-name {
+  font-size: 0.9rem;
+  color: #b0b0b0;
+  margin: 0;
+}
+
+.price {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #151f1d;
+  margin: 0.5rem 0 1rem;
+}
+
+.info {
+  font-size: 0.9rem;
+  color: #5a5a5a;
+  margin: 0.3rem 0;
+}
+
+.transaction-section {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.transaction-section label {
+  font-size: 0.8rem;
+  color: #5a5a5a;
+}
+
+/* Input Styling */
+.transaction-section input {
+  width: 40px;
+  padding: 0.3rem;
+  font-size: 0.9rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  transition:
+    border-color 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+/* Input Hover State */
+.transaction-section input:hover {
+  border-color: #3369fd;
+}
+
+/* Input Focus State */
+.transaction-section input:focus {
+  border-color: #5da684;
+  outline: none;
+  box-shadow: 0px 0px 4px rgba(93, 166, 132, 0.5);
+}
+
+/* Button Styling */
+.transaction-section button {
+  padding: 0.3rem 0.8rem;
+  font-size: 0.9rem;
+  color: #ffffff;
+  background-color: #3369fd;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.transaction-section button:hover {
+  background-color: #fd4980;
+}
+
+.buy-sell {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.transaction-section button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.transaction-section input:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.transaction-section button:disabled:hover {
+  background-color: #3369fd;
+}

@@ -1,0 +1,50 @@
+<div class="card">
+  <div class="card-header">
+    <div class="icon">
+      <span>₿</span>
+    </div>
+    <div class="symbol-name">
+      <h3>{{ symbol }}</h3>
+    </div>
+  </div>
+
+  <div class="card-body">
+    <p class="price">{{ price | currency: "USD" : "symbol" : "1.2-2" }}</p>
+    <p class="info">Shares: {{ shares }}</p>
+    <!-- <p class="info">Gains: {{ formattedGains }}</p> -->
+
+    <ng-container *ngIf="ableToBuy">
+      <div class="buy-sell">
+        <div class="transaction-section">
+          <input
+            type="number"
+            id="buyQuantity"
+            name="buyQuantity"
+            min="0"
+            [(ngModel)]="buyQuantity"
+            placeholder="Buy Quantity"
+          />
+          <button (click)="handleBuy()" [disabled]="!buyInputIsValid()">
+            Buy
+          </button>
+        </div>
+
+        <div class="transaction-section">
+          <input
+            type="number"
+            id="sellQuantity"
+            name="sellQuantity"
+            min="0"
+            max="{{ shares }}"
+            [disabled]="!hasShares()"
+            [(ngModel)]="sellQuantity"
+            placeholder="Sell Quantity"
+          />
+          <button (click)="handleSell()" [disabled]="!sellInputIsValid()">
+            Sell
+          </button>
+        </div>
+      </div>
+    </ng-container>
+  </div>
+</div>

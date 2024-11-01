@@ -1,0 +1,16 @@
+<!-- dashboard.component.html -->
+<div class="dashboard">
+  <h2 class="dashboard-title">Stock Dashboard</h2>
+  <p class="current-balance">
+    Current Balance: {{ capital | currency: "USD" : "symbol" : "1.2-2" }}
+  </p>
+  <div class="stock-container">
+    @for (item of stocks; track item.symbol) {
+      <app-crypto-card
+        [symbol]="item.symbol"
+        [price]="item.price"
+        [ableToBuy]="item.ableToBuy"
+      ></app-crypto-card>
+    }
+  </div>
+</div>

@@ -1,0 +1,37 @@
+<form class="register-form">
+  <h2>Welcome! Create Your Account</h2>
+  <p class="register-subtext">Fill in the details to get started.</p>
+
+  @if (errorMessage) {
+    <div class="error-message">
+      {{ errorMessage }}
+    </div>
+  }
+
+  <div class="field">
+    <label for="email">Email</label>
+    <input type="email" id="email" name="email" [(ngModel)]="register.email" />
+  </div>
+
+  <div class="field">
+    <label for="password">Password</label>
+    <input
+      type="password"
+      id="password"
+      name="password"
+      [(ngModel)]="register.password"
+    />
+  </div>
+
+  <div class="field">
+    <label for="confirmPassword">Confirm Password</label>
+    <input
+      type="password"
+      id="confirmPassword"
+      name="confirmPassword"
+      [(ngModel)]="register.confirmPassword"
+    />
+  </div>
+
+  <button type="button" (click)="onRegister()">Register</button>
+</form>

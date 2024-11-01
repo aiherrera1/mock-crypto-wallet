@@ -11,7 +11,23 @@
   <div class="card-body">
     <p class="price">{{ price | currency: "USD" : "symbol" : "1.2-2" }}</p>
     <p class="info">Shares: {{ shares }}</p>
-    <!-- <p class="info">Gains: {{ formattedGains }}</p> -->
+    @if (!ableToBuy) {
+      @if (gains > 0) {
+        <p class="gains profit">
+          Gains: {{ gains | currency: "USD" : "symbol" : "1.2-2" }}
+        </p>
+      }
+      @if (gains < 0) {
+        <p class="gains loss">
+          Gains: {{ gains | currency: "USD" : "symbol" : "1.2-2" }}
+        </p>
+      }
+      @if (gains === 0) {
+        <p class="gains">
+          Gains: {{ gains | currency: "USD" : "symbol" : "1.2-2" }}
+        </p>
+      }
+    }
 
     <ng-container *ngIf="ableToBuy">
       <div class="buy-sell">

@@ -21,7 +21,7 @@ interface Crypto {
   styleUrls: ['./dashboard.component.css'],
 })
 export class DashboardComponent implements OnInit, OnDestroy {
-  @Input() transactions: boolean = false;
+  @Input() market: boolean = false;
   stocks: Crypto[] = [];
   capital: number = 0;
   formattedCapital: string = '';
@@ -51,8 +51,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
     this.stocks = symbols.map((symbol) => ({
       symbol,
       price: 0,
-      ableToBuy: this.transactions,
-      ableToSell: this.transactions,
+      ableToBuy: this.market,
+      ableToSell: this.market,
     }));
 
     this.cryptoSubscription = this.cryptoService

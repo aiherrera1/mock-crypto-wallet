@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { DashboardComponent } from '../dashboard/dashboard.component';
 import { UserService } from '../../services/user.service';
+import { CommonModule } from '@angular/common';
 
 interface Transaction {
   symbol: string;
@@ -11,16 +11,20 @@ interface Transaction {
 }
 
 @Component({
-  selector: 'app-transactions',
+  selector: 'app-trade-history',
   standalone: true,
-  imports: [DashboardComponent],
-  templateUrl: './transactions.component.html',
-  styleUrls: ['./transactions.component.css'],
+  imports: [CommonModule],
+  templateUrl: './trade-history.component.html',
+  styleUrls: ['./trade-history.component.css'],
 })
-export class TransactionsComponent implements OnInit, OnDestroy {
+export class TradeHistoryComponent implements OnInit, OnDestroy {
   transactions: Transaction[] = [];
 
   constructor(private userService: UserService) {}
+
+  totalAmount(price: number, quantity: number): number {
+    return price * quantity;
+  }
 
   async ngOnInit(): Promise<void> {
     try {

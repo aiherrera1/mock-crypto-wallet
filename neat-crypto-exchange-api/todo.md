@@ -1,5 +1,5 @@
 - [x] fix buy-sell logic
-- [ ] put transactions history on other page
+- [x] put transactions history on other page
 - [ ] current balance in other color
 - [ ] serparate nav bar logout
 - [ ] fix css bitcoin logo

@@ -8,7 +8,10 @@
     @if (user) {
       <div>
         <a routerLink="/dashboard" routerLinkActive="active">Home</a>
-        <a routerLink="/transactions" routerLinkActive="active">Transactions</a>
+        <a routerLink="/market" routerLinkActive="active">Market</a>
+        <a routerLink="/trade-history" routerLinkActive="active"
+          >Trade History</a
+        >
         <button (click)="handleLogout()">Logout</button>
       </div>
     } @else {

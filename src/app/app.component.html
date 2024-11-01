@@ -1,26 +1,33 @@
 <main class="main-container">
+  <nav class="navigation">
+    @if (user) {
+      <div class="nav-container">
+        <div class="links">
+          <a routerLink="/dashboard" routerLinkActive="active">Home</a>
+          <a routerLink="/market" routerLinkActive="active">Market</a>
+          <a routerLink="/trade-history" routerLinkActive="active"
+            >Trade History</a
+          >
+        </div>
+        <div class="logout">
+          <button (click)="handleLogout()">Logout</button>
+        </div>
+      </div>
+    } @else {
+      <div class="nav-container">
+        <div class="links">
+          <a routerLink="/login" routerLinkActive="active">Login</a>
+          <a routerLink="/register">Register</a>
+        </div>
+      </div>
+    }
+  </nav>
+
   @if (user) {
     <div class="welcome-message">
       <p>Welcome, {{ user.email }}!</p>
     </div>
   }
-  <nav class="navigation">
-    @if (user) {
-      <div>
-        <a routerLink="/dashboard" routerLinkActive="active">Home</a>
-        <a routerLink="/market" routerLinkActive="active">Market</a>
-        <a routerLink="/trade-history" routerLinkActive="active"
-          >Trade History</a
-        >
-        <button (click)="handleLogout()">Logout</button>
-      </div>
-    } @else {
-      <div>
-        <a routerLink="/login" routerLinkActive="active">Login</a>
-        <a routerLink="/register">Register</a>
-      </div>
-    }
-  </nav>
 </main>
 
-<router-outlet />
+<router-outlet></router-outlet>

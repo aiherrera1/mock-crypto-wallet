@@ -1,8 +1,9 @@
 - [x] fix buy-sell logic
 - [x] put transactions history on other page
-- [ ] current balance in other color
-- [ ] serparate nav bar logout
-- [ ] fix css bitcoin logo
-- [ ] green and red for gains
-- [ ] add username
-- [ ] update after buy or sell
+- [x] current balance in other color
+- [x] serparate nav bar logout
+- [x] fix css bitcoin logo
+- [x] green and red for gains
+- [ ] make pwa
+- [ ] make animation when purchased or sold
+- [ ] total user profit

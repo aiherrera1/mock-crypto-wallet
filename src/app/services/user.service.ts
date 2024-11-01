@@ -1,6 +1,7 @@
-import { Injectable } from '@angular/core';
+import { Injectable, OnInit, OnDestroy } from '@angular/core';
 import { AuthService } from './auth.service';
 import { getDatabase, ref, get, set, push } from '@angular/fire/database';
+import { User } from '@angular/fire/auth';
 
 interface Trade {
   symbol: string;
@@ -12,12 +13,15 @@ interface Trade {
 @Injectable({
   providedIn: 'root',
 })
-export class UserService {
+export class UserService implements OnInit {
+  isLoggedIn: boolean = false;
+  user: User | null = null;
   private db = getDatabase();
   constructor(private authService: AuthService) {}
 
   getUid(): string | undefined {
     const user = this.authService.getCurrentUser();
+    console.log(user);
     if (user) {
       return user.uid;
     }
@@ -164,34 +168,12 @@ export class UserService {
     }
   }
 
-  async getSharesOfCrypto(symbol: string): Promise<number> {
-    const uid = this.getUid();
-    if (!uid) {
-      console.log('User not logged in');
-      return 0;
-    }
-
-    const portfolioRef = ref(this.db, `users/${uid}/portfolio/${symbol}`);
-    try {
-      const snapshot = await get(portfolioRef);
-      if (snapshot.exists()) {
-        return snapshot.val();
-      } else {
-        console.log('No shares found for this user');
-        return 0;
-      }
-    } catch (error) {
-      console.error('Error fetching shares:', error);
-      return 0;
-    }
-  }
-
   async getProfitOfShares(
     symbol: string,
     currentPrice: number,
   ): Promise<number> {
     let currentValue = 0;
-    const shares = this.getShares(symbol);
+    const shares = await this.getShares(symbol);
     currentValue = shares * currentPrice;
 
     let totalInvested = 0;
@@ -205,24 +187,40 @@ export class UserService {
     return currentValue - totalInvested;
   }
 
-  getShares(symbol: string): number {
+  async getShares(symbol: string): Promise<number> {
     const uid = this.getUid();
     if (!uid) {
       console.log('User not logged in');
       return 0;
     }
-
     const portfolioRef = ref(this.db, `users/${uid}/portfolio/${symbol}`);
-    get(portfolioRef).then((snapshot) => {
+    try {
+      const snapshot = await get(portfolioRef);
       if (snapshot.exists()) {
-        console.log('Shares found for this user');
-        console.log(snapshot.val());
+        console.log('Shares found:', snapshot.val());
         return snapshot.val();
       } else {
         console.log('No shares found for this user');
         return 0;
       }
+    } catch (error) {
+      console.error('Error fetching shares:', error);
+      return 0;
+    }
+  }
+
+  ngOnInit(): void {
+    this.authService.authState$.subscribe(async (user) => {
+      if (user) {
+        this.isLoggedIn = true;
+        this.user = user;
+      } else {
+        console.log('User logged out');
+      }
     });
-    return 0;
+  }
+
+  ngOnDestroy(): void {
+    this.authService.authState$.subscribe().unsubscribe();
   }
 }

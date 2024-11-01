@@ -3,6 +3,7 @@ import {
   Input,
   OnInit,
   ChangeDetectionStrategy,
+  ChangeDetectorRef,
 } from '@angular/core';
 import { CryptoService } from '../../services/crypto.service';
 import { UserService } from '../../services/user.service';
@@ -23,13 +24,14 @@ export class CryptoCardComponent implements OnInit {
   @Input() gains: number = 0;
   @Input() ableToBuy: boolean = false;
   @Input() ableToSell: boolean = false;
-  @Input() shares: number = 0;
+  shares: number = 0;
   buyQuantity: number = 0;
   sellQuantity: number = 0;
 
   constructor(
     private cryptoService: CryptoService,
     private userService: UserService,
+    private cdr: ChangeDetectorRef,
   ) {}
 
   async hasSufficientFunds(): Promise<boolean> {
@@ -55,6 +57,9 @@ export class CryptoCardComponent implements OnInit {
           this.buyQuantity,
           'buy',
         );
+        // Update shares after successful buy
+        this.shares = await this.userService.getShares(this.symbol);
+        this.cdr.markForCheck();
       } catch (err) {
         console.error('Purchase failed:', err);
         // Handle error (e.g., show error message to user)
@@ -73,6 +78,9 @@ export class CryptoCardComponent implements OnInit {
           this.sellQuantity,
           'sell',
         );
+        // Update shares after successful sell
+        this.shares = await this.userService.getShares(this.symbol);
+        this.cdr.markForCheck();
       } catch (err) {
         console.error('Sale failed:', err);
         // Handle error (e.g., show error message to user)
@@ -80,5 +88,18 @@ export class CryptoCardComponent implements OnInit {
     }
   }
 
-  async ngOnInit(): Promise<void> {}
+  async ngOnInit(): Promise<void> {
+    try {
+      console.log('Symbol:', this.symbol);
+      this.shares = await this.userService.getShares(this.symbol);
+      console.log('Symbol:', this.symbol);
+      console.log('Price:', this.price);
+      console.log('Gains:', this.gains);
+      console.log('Shares:', this.shares);
+      this.cdr.markForCheck();
+    } catch (error) {
+      console.error('Error fetching user shares:', error);
+      this.shares = 0;
+    }
+  }
 }

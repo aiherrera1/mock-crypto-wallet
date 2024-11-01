@@ -1,3 +1,4 @@
+// dashboard.component.ts
 import { Component, OnInit, OnDestroy, Input } from '@angular/core';
 import { CryptoService } from '../../services/crypto.service';
 import { CryptoCardComponent } from '../crypto-card/crypto-card.component';
@@ -10,7 +11,6 @@ interface Crypto {
   gains: number;
   ableToBuy: boolean;
   ableToSell: boolean;
-  shares: number;
 }
 
 @Component({
@@ -32,22 +32,20 @@ export class DashboardComponent implements OnInit, OnDestroy {
     private userService: UserService,
   ) {}
 
-  setUserCapital(): void {
-    this.userService.getUserCapital().then(
-      (capital) => {
-        if (capital === undefined) {
-          console.error('Could not retrieve user capital.');
-          return;
-        }
-        this.capital = capital;
-      },
-      (error) => {
-        console.error('Error retrieving user capital:', error);
-      },
-    );
+  async setUserCapital(): Promise<void> {
+    try {
+      const capital = await this.userService.getUserCapital();
+      if (capital === undefined) {
+        console.error('Could not retrieve user capital.');
+        return;
+      }
+      this.capital = capital;
+    } catch (error) {
+      console.error('Error retrieving user capital:', error);
+    }
   }
 
-  subscribeToCryptoPrices(): void {
+  async subscribeToCryptoPrices(): Promise<void> {
     const symbols = ['BTC', 'ETH', 'XRP', 'BCH', 'ADA', 'LTC', 'XEM', 'XLM'];
     this.stocks = symbols.map((symbol) => ({
       symbol,
@@ -55,7 +53,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
       gains: 0,
       ableToBuy: this.transactions,
       ableToSell: this.transactions,
-      shares: this.userService.getShares(symbol),
     }));
 
     this.cryptoSubscription = this.cryptoService

@@ -1,6 +1,6 @@
 {
-  "name": "proyecto-neat-pagos",
-  "short_name": "proyecto-neat-pagos",
+  "name": "mock-crypto-wallet",
+  "short_name": "mock-crypto-wallet",
   "theme_color": "#1976d2",
   "background_color": "#fafafa",
   "display": "standalone",

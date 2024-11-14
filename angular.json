@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "proyecto-neat-pagos": {
+    "mock-crypto-wallet": {
       "projectType": "application",
       "schematics": {},
       "root": "",
@@ -13,7 +13,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:application",
           "options": {
-            "outputPath": "dist/proyecto-neat-pagos",
+            "outputPath": "dist/mock-crypto-wallet",
             "index": "src/index.html",
             "browser": "src/main.ts",
             "polyfills": ["zone.js"],
@@ -56,10 +56,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "proyecto-neat-pagos:build:production"
+              "buildTarget": "mock-crypto-wallet:build:production"
             },
             "development": {
-              "buildTarget": "proyecto-neat-pagos:build:development"
+              "buildTarget": "mock-crypto-wallet:build:development"
             }
           },
           "defaultConfiguration": "development"

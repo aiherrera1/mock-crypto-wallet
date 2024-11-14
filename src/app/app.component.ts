@@ -26,7 +26,7 @@ import { CryptoService } from './services/crypto.service';
   styleUrl: './app.component.css',
 })
 export class AppComponent implements OnInit, OnDestroy {
-  title = 'proyecto-neat-pagos';
+  title = 'mock-crypto-wallet';
   isLoggedIn: boolean = false;
   user: User | null = null;
 

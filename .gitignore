@@ -44,4 +44,6 @@ testem.log
 Thumbs.db
 
 # Crypto exchange
-neat-crypto-exchange-api/node_modules
+random-accept-api/node_modules
+
+
